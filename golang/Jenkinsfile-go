@@ -56,7 +56,7 @@ pipeline {
     stage('Deploy to EKS') {
       steps {
         sh '''
-
+          aws eks update-kubeconfig --name cluster-matcha --region ap-southeast-2
           # ensure namespace exists
           kubectl get ns $K8S_NS || kubectl create ns $K8S_NS
 
