@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-svc
+  name: go-matcha
   namespace: apps
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-svc
+      app: go-matcha
   template:
     metadata:
       labels:
-        app: go-svc
+        app: go-matcha
     spec:
       containers:
-        - name: go-svc
-          image: 768227742578.dkr.ecr.ap-southeast-2.amazonaws.com/go-svc:latest
+        - name: go-matcha
+          image: 768227742578.dkr.ecr.ap-southeast-2.amazonaws.com/go-matcha:latest
           ports:
             - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-svc
+  name: go-matcha
   namespace: apps
 spec:
   type: ClusterIP
   selector:
-    app: go-svc
+    app: go-matcha
   ports:
     - port: 80
       targetPort: 8080
