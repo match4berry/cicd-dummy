@@ -71,15 +71,12 @@ pipeline {
     stage('Show Public Endpoint') {
       steps {
         script {
-          if (env.EXPOSE_TYPE == 'LoadBalancer') {
+          if (env.EXPOSE_TYPE == 'NodePort') {
             sh '''
-              echo "Waiting for external hostname..."
-              for i in {1..30}; do
-                HOST=$(kubectl -n $K8S_NS get svc  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)
-                if [ -n "$HOST" ]; then echo "PUBLIC_URL: http://$HOST"; break; fi
-                sleep 10
-              done
-              kubectl -n $K8S_NS get svc  -o wide
+              NODE=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+              PORT=$(kubectl -n $K8S_NS get svc matcha -o jsonpath='{.spec.ports[0].nodePort}')
+              echo "PUBLIC_URL: http://$NODE:$PORT"
+              kubectl -n $K8S_NS get svc matcha -o wide
             '''
           } 
         }
