@@ -1,0 +1,53 @@
+pipeline {
+  agent any
+  environment {
+    AWS_REGION     = 'ap-southeast-2'                   // your region
+    AWS_ACCOUNT_ID = '768227742578'                     // your account
+    ECR_REPO       = 'matcha-repo'                      // your ECR repo
+    IMAGE          = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
+    PROJECT_NAME   = "golang-svc"
+  }
+  options { timestamps() }
+
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Ensure ECR repo (first run only)') {
+      steps {
+        sh '''
+          aws ecr describe-repositories --repository-names $ECR_REPO --region $AWS_REGION \
+          || aws ecr create-repository --repository-name $ECR_REPO --region $AWS_REGION
+        '''
+      }
+    }
+
+    stage('Login to ECR') {
+      steps {
+        sh '''
+          aws ecr get-login-password --region $AWS_REGION \
+          | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+        '''
+      }
+    }
+
+    stage('Build image') {
+      steps {
+        script { env.GIT_SHA = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim() }
+        sh '''
+          docker build -t $IMAGE/$PROJECT_NAME:$GIT_SHA -t $IMAGE/$PROJECT_NAME:latest -f golang/Dockerfile-go .
+        '''
+      }
+    }
+
+    stage('Push image') {
+      steps {
+        sh '''
+          docker push $IMAGE/$PROJECT_NAME:$GIT_SHA
+          docker push $IMAGE/$PROJECT_NAME:latest
+        '''
+      }
+    }
+  }
+}
