@@ -6,6 +6,9 @@ pipeline {
     ECR_REPO       = 'matcha'                      // your ECR repo
     IMAGE          = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
     PROJECT_NAME   = "golang-svc"
+    K8S_NS         = 'apps'
+    EXPOSE_TYPE    = 'LoadBalancer' 
+    EKS_CLUSTER    = 'cluster-matcha'  
   }
   options { timestamps() }
 
@@ -49,5 +52,40 @@ pipeline {
         '''
       }
     }
+
+    stage('Deploy to EKS') {
+      steps {
+        sh '''
+          aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
+
+          # ensure namespace exists
+          kubectl get ns $K8S_NS || kubectl create ns $K8S_NS
+
+          # update image in deployment file and apply
+          sed -i "s#image: .*#image: $IMAGE/$PROJECT_NAME:latest#g" deploy.yaml
+          kubectl -n $K8S_NS apply -f deploy.yaml
+
+        '''
+      }
+    }
+
+    stage('Show Public Endpoint') {
+      steps {
+        script {
+          if (env.EXPOSE_TYPE == 'LoadBalancer') {
+            sh '''
+              echo "Waiting for external hostname..."
+              for i in {1..30}; do
+                HOST=$(kubectl -n $K8S_NS get svc  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)
+                if [ -n "$HOST" ]; then echo "PUBLIC_URL: http://$HOST"; break; fi
+                sleep 10
+              done
+              kubectl -n $K8S_NS get svc  -o wide
+            '''
+          } 
+        }
+      }
+    }
   }
-}
+  }
+
