@@ -7,7 +7,7 @@ pipeline {
     IMAGE          = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
     PROJECT_NAME   = "golang-svc"
     K8S_NS         = 'apps'
-    EXPOSE_TYPE    = 'LoadBalancer' 
+    EXPOSE_TYPE    = 'NodePort'              
     EKS_CLUSTER    = 'cluster-matcha'  
   }
   options { timestamps() }
