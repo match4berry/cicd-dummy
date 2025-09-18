@@ -56,7 +56,6 @@ pipeline {
     stage('Deploy to EKS') {
       steps {
         sh '''
-          aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
 
           # ensure namespace exists
           kubectl get ns $K8S_NS || kubectl create ns $K8S_NS
