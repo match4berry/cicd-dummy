@@ -62,7 +62,7 @@ pipeline {
 
           # update image in deployment file and apply
           sed -i "s#image: .*#image: $IMAGE/$PROJECT_NAME:latest#g" golang/deploy.yaml
-          kubectl -n $K8S_NS apply -f deploy.yaml
+          kubectl -n $K8S_NS apply -f golang/deploy.yaml
 
         '''
       }
