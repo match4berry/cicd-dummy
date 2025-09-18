@@ -44,8 +44,8 @@ pipeline {
     stage('Push image') {
       steps {
         sh '''
-          docker push $IMAGE/$PROJECT_NAME:$GIT_SHA
-          docker push $IMAGE/$PROJECT_NAME:latest
+          docker push $IMAGE:$GIT_SHA
+          docker push $IMAGE:latest
         '''
       }
     }
