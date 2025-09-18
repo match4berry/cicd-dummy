@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-svc
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-svc
+  template:
+    metadata:
+      labels:
+        app: go-svc
+    spec:
+      containers:
+        - name: go-svc
+          image: 768227742578.dkr.ecr.ap-southeast-2.amazonaws.com/go-svc:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-svc
+  namespace: apps
+spec:
+  type: ClusterIP
+  selector:
+    app: go-svc
+  ports:
+    - port: 80
+      targetPort: 8080
