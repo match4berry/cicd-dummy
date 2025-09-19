@@ -88,11 +88,12 @@ u: matcha
 p: matcha
 
 Go app (Go-Matcha) → http://a21dbf461af7b451491b5a9c48c05a65-fd3fe3836a72bb17.elb.ap-southeast-2.amazonaws.com/ping
-Js app (Js-Matcha) → still pending because new account need approval from AWS
+Js app (Js-Matcha) → http://ac5a7f9e938d145199ac31828b2e0207-3c1a153ef54e22c1.elb.ap-southeast-2.amazonaws.com/ping
  
 
 ##  📊 Lampiran
-![aplikasi node.js](lampiran/1af34c69-c71c-4d07-992a-82c7abb3e894.jpg)
+aplikasi node.js yang pending loadbalancernya
+![aplikasi node.js yang pending](lampiran/1af34c69-c71c-4d07-992a-82c7abb3e894.jpg)
 ![service node.js](lampiran/4e7a4c75-3117-46d8-a0b2-3099dfa359a2.jpg)
 ![service golang](lampiran/5d962ae8-635b-44f5-83ec-270a99ac9d33.jpg)
 
