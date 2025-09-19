@@ -83,8 +83,13 @@ kubectl -n apps get svc
 
 Open the URL in a browser:
 
+Jenkins → http://ec2-3-27-135-93.ap-southeast-2.compute.amazonaws.com:8080/ 
+u: matcha
+p: matcha
+
 Go app (Go-Matcha) → http://a21dbf461af7b451491b5a9c48c05a65-fd3fe3836a72bb17.elb.ap-southeast-2.amazonaws.com/ping
 Js app (Js-Matcha) → still pending because new account need approval from AWS
+ 
 
 ##  📊 Lampiran
 ![aplikasi node.js](lampiran/1af34c69-c71c-4d07-992a-82c7abb3e894.jpg)
