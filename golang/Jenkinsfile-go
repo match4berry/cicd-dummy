@@ -75,11 +75,11 @@ pipeline {
             sh '''
               echo "Waiting for external hostname..."
               for i in {1..30}; do
-                HOST=$(kubectl -n $K8S_NS get svc matcha -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)
+                HOST=$(kubectl -n $K8S_NS get svc go-matcha -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)
                 if [ -n "$HOST" ]; then echo "PUBLIC_URL: http://$HOST"; break; fi
                 sleep 10
               done
-              kubectl -n $K8S_NS get svc matcha -o wide
+              kubectl -n $K8S_NS get svc go-matcha -o wide
         
             '''
           } 
