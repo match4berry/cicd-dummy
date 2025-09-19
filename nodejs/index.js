@@ -72,7 +72,7 @@ const requestHandler = (req, res) => {
 
 // Create and start server
 const PORT = process.env.PORT || 8080;
-const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || '0.0.0.0';
 
 const server = http.createServer(requestHandler);
 
