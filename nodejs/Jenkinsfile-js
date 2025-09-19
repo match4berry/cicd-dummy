@@ -39,7 +39,7 @@ pipeline {
       steps {
         script { env.GIT_SHA = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim() }
         sh '''
-          docker build -t $IMAGE/$PROJECT_NAME:$GIT_SHA -t $IMAGE/$PROJECT_NAME:latest -f golang/Dockerfile-go .
+          docker build -t $IMAGE/$PROJECT_NAME:$GIT_SHA -t $IMAGE/$PROJECT_NAME:latest -f nodejs/Dockerfile-js .
         '''
       }
     }
