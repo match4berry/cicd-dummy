@@ -5,7 +5,7 @@ pipeline {
     AWS_ACCOUNT_ID = '768227742578'                     // your account
     ECR_REPO       = 'matcha'                      // your ECR repo
     IMAGE          = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
-    PROJECT_NAME   = "golang-svc"
+    PROJECT_NAME   = "nodejs-svc"
     K8S_NS         = 'apps'
     EXPOSE_TYPE    = 'LoadBalancer'         
     EKS_CLUSTER    = 'cluster-matcha'  
@@ -61,8 +61,8 @@ pipeline {
           kubectl get ns $K8S_NS || kubectl create ns $K8S_NS
 
           # update image in deployment file and apply
-          sed -i "s#image: .*#image: $IMAGE/$PROJECT_NAME:latest#g" golang/deploy.yaml
-          kubectl -n $K8S_NS apply -f golang/deploy.yaml
+          sed -i "s#image: .*#image: $IMAGE/$PROJECT_NAME:latest#g" nodejs/deploy.yaml
+          kubectl -n $K8S_NS apply -f nodejs/deploy.yaml
 
         '''
       }
