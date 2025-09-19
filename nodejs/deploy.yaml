@@ -15,9 +15,9 @@ spec:
         - name: js-matcha
           image: 768227742578.dkr.ecr.ap-southeast-2.amazonaws.com/matcha/nodejs-svc:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
           readinessProbe:
-            httpGet: { path: /, port: 3000 }
+            httpGet: { path: /, port: 8080 }
             initialDelaySeconds: 5
             periodSeconds: 5
 
